@@ -233,7 +233,7 @@ class Snn:
                     c = candidates[c1, c2]
                     if source != c and c is not None and c not in connected:
                         connected.add(c)
-                        self.connect(source, c, weight=randn())
+                        self.connect(source, c, weight=min(randn() + 0.9, 1))
                         count -= 1
                     if count <= 0:
                         return origCount - count
