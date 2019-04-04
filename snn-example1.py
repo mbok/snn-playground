@@ -52,6 +52,8 @@ fig = plt.figure()
 ax = mplot3d.Axes3D(fig)
 
 visNeurons = []
+visSynapses = []
+synapses = []
 i = -1
 for n in snn.neurons:
     visNeurons.append(ax.scatter(
@@ -63,14 +65,17 @@ for n in snn.neurons:
         color = "red"
         if s.weight < 0:
             color = "blue"
-        ax.plot([n.position[0], s.target.position[0]], [n.position[1], s.target.position[1]],
-                zs=[n.position[2], s.target.position[2]], color=color, alpha=abs(s.weight) * 0.25)
+        synapses.append(s)
+        visSynapses.append(ax.plot([n.position[0], s.target.position[0]], [n.position[1], s.target.position[1]],
+                zs=[n.position[2], s.target.position[2]], color=color, alpha=abs(s.weight) * 0.15)[0])
 
 
 def animate(frame):
     global visNeurons
     global sim
     global snn
+    global visSynapses
+    global synapses
     if random.random() < 0.75:
         sim.context.addSpike(snn.neurons[0])
     if random.random() < 0.75:
@@ -84,6 +89,14 @@ def animate(frame):
             visNeurons[i].set_alpha(1)
         else:
             visNeurons[i].set_alpha(0.125)
+    if frame % 1 == 0:
+        i = -1
+        for s in synapses:
+            i += 1
+            if s.preSpikedAt == sim.context.clock:
+                visSynapses[i].set_alpha(abs(s.weight) * 1)
+            else:
+                visSynapses[i].set_alpha(abs(s.weight) * 0.15)
     sim.nextTick()
     print("Simulation time: " + str(sim.context.clock))
 

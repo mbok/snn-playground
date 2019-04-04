@@ -83,17 +83,17 @@ class Synapse:
         if self.weight < 0:
             if postSpiked and (context.clock - self.preSpikedAt) <= self.stdpInterval:
                 self.preSpikedAt = -1
-                self.weight -= self.weight / 100.0
+                self.weight -= self.weight / 10.0
             elif context.clock - self.preSpikedAt > self.stdpInterval:
                 self.preSpikedAt = -1
-                self.weight += (-1 - self.weight) / 100.0
+                self.weight += (-1 - self.weight) / 10.0
         else:
             if postSpiked and (context.clock - self.preSpikedAt) <= self.stdpInterval:
                 self.preSpikedAt = -1
-                self.weight += (1 - self.weight) / 100.0
+                self.weight += (1 - self.weight) / 10.0
             elif context.clock - self.preSpikedAt > self.stdpInterval:
                 self.preSpikedAt = -1
-                self.weight -= self.weight / 100.0
+                self.weight -= self.weight / 10.0
 
 
 class Neuron:
